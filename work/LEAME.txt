@@ -1,0 +1,50 @@
+README March/25/1999
+
+Prueba de SAQ Encoding/decoding
+
+-Codifiquemos a ingrid, por ejemplo. El archivo ingrid.raw contiene
+esta imagen en formato de bytes.
+En este momento, el codificador recibe formato de floats, así que
+primero hagamos la conversion:
+
+        java is.ezw.SAQUtil -b2f 256 ingrid.raw fingrid.raw
+
+Esto produce fingrid.raw
+
+-Obtengamos la wavelet transform (por ahora solo con Daub-4):
+
+        java is.ezw.SAQUtil -wtdaub4 256 fingrid.raw wingrid.raw
+
+Esto produce wingrid.raw.
+
+-Para saber el threshold inicial, obtengamos algunos stats de
+wingrid.raw:
+
+        java is.ezw.SAQUtil -stats 256 wingrid.raw
+
+Esto produce:
+mean =  0.89309734
+max =   14361.481
+min =   -2746.9397
+
+Con esto, podemos establecer T0 = 7200 (|max| < 2*T0).
+
+-Ahora sí, la codificacion, digamos con 15 pasadas:
+
+        java is.ezw.SAQ -encode 256 7200 15 wingrid.raw ingrid.bit
+
+Esto produce ingrid.bit.
+
+-Para ver la decodificación progresivamente, con 200ms aprox
+de intervalo entre imágenes:
+
+        java is.ezw.BitViewer 200 ingrid.bit
+
+Listo.
+
+Este formato .bit contiene a nivel de bits los símbolos generados
+por el successive approximation quantizer. Aún falta aplicar
+algún entropy coding
+
+Cada programa de estos puede invocarse sin argumentos para conocer
+una breve guía de lo que ofrece.

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<project name="EZW" default="ezw" basedir=".">
+	<property file="build.properties"/>
+	<property name="src" value="src"/>
+
+    <target name="init">
+		<tstamp/>		
+		<mkdir dir="${build}/classes"/>
+		<mkdir dir="${dist}/ext"/>
+	</target>
+
+    <target name="ezw" depends="init, compile">
+        <jar jarfile="${dist}/ezw.jar"
+         	basedir="${build}/classes"
+		/>
+    </target>
+
+
+    <target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}/classes"
+        	includes="**/*.java"
+			debug="on"
+       />
+    </target>
+
+
+    <target name="clean-ext">
+		<delete dir="${build}/ext"/>
+    </target>
+
+    <target name="clean">
+		<delete dir="${build}"/>
+    </target>
+
+    <target name="clean-dist" depends="clean">
+		<delete dir="${dist}"/>
+    </target>
+
+</project>
